@@ -14,7 +14,7 @@ $table_data = [
     _l('task_assigned'),
     _l('tags'),
     _l('tasks_list_priority'),
-   
+    _l('subtask')
 ];
 
 array_unshift($table_data, [

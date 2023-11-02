@@ -426,8 +426,19 @@
                         echo render_textarea('description', '', (isset($task) ? $task->description : ''), ['rows' => 6, 'placeholder' => _l('task_add_description'), 'data-task-ae-editor' => true, !is_mobile() ? 'onclick' : 'onfocus' => (!isset($task) || isset($task) && $task->description == '' ? 'init_editor(\'.tinymce-task\', {height:200, auto_focus: true});' : '')], [], 'no-mbot', 'tinymce-task'); ?>
                     </div>
                 </div>
-             
-                
+                <br>
+                <div class="row">
+                    
+                    <div class="col-md-12">
+                        <label for="subtasks" style="color: green;"><?php echo _l('task_subtasks_label'); ?></label>
+                       <br>
+                        <?php
+                        $value = (isset($task) ? $task->subtask : '');
+                        // echo '<textarea style="color: green; name="subtasks" class="form-control" placeholder="' . _l('task_subtasks_placeholder') . '" rows="3">' . $value . '</textarea>';
+                        echo '<textarea style="color: green;" name="subtask" class="form-control" placeholder="' . _l('task_subtasks_placeholder') . '" rows="3">' . $value . '</textarea>';
+                        ?>
+                    </div>
+                </div>
 
             </div>
 

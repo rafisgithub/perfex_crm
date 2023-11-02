@@ -16,7 +16,7 @@ $aColumns = [
      get_sql_select_task_asignees_full_names() . ' as assignees',
     '(SELECT GROUP_CONCAT(name SEPARATOR ",") FROM ' . db_prefix() . 'taggables JOIN ' . db_prefix() . 'tags ON ' . db_prefix() . 'taggables.tag_id = ' . db_prefix() . 'tags.id WHERE rel_id = ' . db_prefix() . 'tasks.id and rel_type="task" ORDER by tag_order ASC) as tags',
     'priority',
-   
+    'subtask',
 ];
 
 $sIndexColumn = 'id';
@@ -195,7 +195,8 @@ foreach ($rResult as $aRow) {
 
     $outputPriority .= '</span>';
     $row[] = $outputPriority;
- 
+    // $row[] = $outputPriority;
+    $row[] = $aRow['subtask'];
     // Custom fields add values
     foreach ($customFieldsColumns as $customFieldColumn) {
         $row[] = (strpos($customFieldColumn, 'date_picker_') !== false ? _d($aRow[$customFieldColumn]) : $aRow[$customFieldColumn]);

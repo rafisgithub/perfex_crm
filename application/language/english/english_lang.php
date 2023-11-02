@@ -2512,7 +2512,7 @@ $lang['item_quantity_placeholder']              = 'Quantity';
 $lang['item_rate_placeholder']                  = 'Rate';
 $lang['tickets_summary']                        = 'Tickets Summary';
 $lang['tasks_list_priority']                    = 'Priority';
-
+$lang['subtask']                                = 'Subtask';
 $lang['ticket_status_db_2']                     = 'In Progress';
 $lang['ticket_status_db_1']                     = 'Open';
 $lang['ticket_status_db_3']                     = 'Answered';

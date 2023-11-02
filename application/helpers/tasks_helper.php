@@ -295,7 +295,7 @@ function init_relation_tasks_table($table_attributes = [])
         _l('tags'),
         _l('tasks_list_priority'),
         
-    
+        _l('subtask')
 
         
     ];
