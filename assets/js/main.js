@@ -6996,13 +6996,16 @@ function add_item_to_preview(id) {
     var baseCurency = $currency.attr("data-base");
     var selectedCurrency = $currency.find("option:selected").val();
     var $rateInputPreview = $('.main input[name="rate"]');
+    var $discountInputPreview = $('.main input[name="discount"]');
 
     if (baseCurency == selectedCurrency) {
       $rateInputPreview.val(response.rate);
+      $discountInputPreview.val(response.discount);
     } else {
       var itemCurrencyRate = response["rate_currency_" + selectedCurrency];
       if (!itemCurrencyRate || parseFloat(itemCurrencyRate) === 0) {
         $rateInputPreview.val(response.rate);
+        $discountInputPreview.val(response.discount);
       } else {
         $rateInputPreview.val(itemCurrencyRate);
       }
@@ -7076,6 +7079,7 @@ function add_task_to_preview_as_item(id) {
       .val(response.description);
     previewArea.find('input[name="quantity"]').val(response.total_hours);
     previewArea.find('input[name="rate"]').val(response.hourly_rate);
+    previewArea.find('input[name="discount"]').val("");
     previewArea.find('input[name="unit"]').val("");
     $('input[name="task_id"]').val(id);
     $(document).trigger({
@@ -7104,6 +7108,7 @@ function clear_item_preview_values(default_taxes) {
   previewArea.find('input[name="quantity"]').val(1);
   previewArea.find("select.tax").selectpicker("val", last_taxes_applied);
   previewArea.find('input[name="rate"]').val("");
+  previewArea.find('input[name="discount"]').val("");
   previewArea.find('input[name="unit"]').val("");
 
   $('input[name="task_id"]').val("");
@@ -7149,8 +7154,12 @@ function add_item_to_table(data, itemid, merge_invoice, bill_expense) {
   if (data.rate === "" || isNaN(data.rate)) {
     data.rate = 0;
   }
+  // Check if discount is number
+  if (data.discount === "" || isNaN(data.discount)) {
+    data.discount = 0;
+  }
 
-  var amount = data.rate * data.qty;
+  var amount = (data.rate * data.qty) - data.discount;
 
   var tax_name = "newitems[" + item_key + "][taxname][]";
   $("body").append('<div class="dt-loader"></div>');
@@ -7292,6 +7301,16 @@ function add_item_to_table(data, itemid, merge_invoice, bill_expense) {
       '][rate]" value="' +
       data.rate +
       '" class="form-control"></td>';
+
+    table_row +=
+      '<td class="discount"><input type="number" data-toggle="tooltip" title="' +
+      app.lang.item_field_not_formatted +
+      '" onblur="calculate_total();" onchange="calculate_total();" name="newitems[' +
+      item_key +
+      '][discount]" value="' +
+      data.discount +
+      '" class="form-control"></td>';
+
 
     table_row += '<td class="taxrate">' + tax_dropdown + "</td>";
 
@@ -7518,6 +7537,7 @@ function get_item_preview_values() {
   response.qty = $('.main input[name="quantity"]').val();
   response.taxname = $(".main select.tax").selectpicker("val");
   response.rate = $('.main input[name="rate"]').val();
+  response.discount = $('.main input[name="discount"]').val();
   response.unit = $('.main input[name="unit"]').val();
   return response;
 }
@@ -7558,7 +7578,7 @@ function calculate_total() {
     }
 
     _amount = accounting.toFixed(
-      $(this).find("td.rate input").val() * quantity,
+      $(this).find("td.rate input").val() * quantity - ($this).find("td.discount input"),
       app.options.decimal_places
     );
     _amount = parseFloat(_amount);

@@ -39,7 +39,7 @@
                             data-toggle="tooltip"
                             data-title="<?php echo _l('item_description_new_lines_notice'); ?>"></i>
                         <?php echo _l('estimate_table_item_heading'); ?></th>
-                    <th width="25%" align="left"><?php echo _l('estimate_table_item_description'); ?></th>
+                    <th width="25%" align="center"><?php echo _l('estimate_table_item_description'); ?></th>
                     <?php
                   $custom_fields = get_custom_fields('items');
                   foreach ($custom_fields as $cf) {
@@ -53,10 +53,11 @@
                       $qty_heading = _l('estimate_table_quantity_heading') . '/' . _l('estimate_table_hours_heading');
                   }
                   ?>
-                    <th width="10%" class="qty" align="right"><?php echo $qty_heading; ?></th>
-                    <th width="15%" align="right"><?php echo _l('estimate_table_rate_heading'); ?></th>
-                    <th width="20%" align="right"><?php echo _l('estimate_table_tax_heading'); ?></th>
-                    <th width="10%" align="right"><?php echo _l('estimate_table_amount_heading'); ?></th>
+                    <th width="10%" class="qty" align="center"><?php echo $qty_heading; ?></th>
+                    <th width="15%" align="center"><?php echo _l('estimate_table_rate_heading'); ?></th>
+                    <th width="15%" align="center"><?php echo _l('estimate_table_discount_heading'); ?></th>
+                    <th width="20%" align="center"><?php echo _l('estimate_table_tax_heading'); ?></th>
+                    <th width="10%" align="center"><?php echo _l('estimate_table_amount_heading'); ?></th>
                     <th align="center"><i class="fa fa-cog"></i></th>
                 </tr>
             </thead>
@@ -82,6 +83,10 @@
                     <td>
                         <input type="number" name="rate" class="form-control"
                             placeholder="<?php echo _l('item_rate_placeholder'); ?>">
+                    </td>
+                    <td>
+                        <input type="number" name="discount" class="form-control"
+                            placeholder="<?php echo _l('item_discount_placeholder'); ?>">
                     </td>
                     <td>
                         <?php
