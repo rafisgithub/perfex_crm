@@ -706,6 +706,18 @@ if (!function_exists('get_table_items_and_taxes')) {
                 $itemHTML .= '<td align="right">';
             }
 
+            $discount = hooks()->apply_filters(
+                'discount_preview_rate',
+                app_format_number($item['discount']),
+                ['item' => $item, 'relation' => $rel_data, 'taxes' => $item_taxes]
+            );
+
+            $itemHTML .= '</td>';
+            $itemHTML .= '<td align="right">' . $rate . '</td>';
+            if (get_option('show_tax_per_item') == 1) {
+                $itemHTML .= '<td align="right">';
+            }
+
             if (defined('INVOICE_PREVIEW_SUBSCRIPTION')) {
                 $item_taxes = $item['taxname'];
             }
@@ -763,7 +775,7 @@ if (!function_exists('get_table_items_and_taxes')) {
 
             $item_amount_with_quantity = hooks()->apply_filters(
                 'item_preview_amount_with_currency',
-                app_format_number(($item['qty'] * $item['rate'])),
+                app_format_number(($item['qty'] * $item['rate']-$item['discount'])),
                 [
                 'item'       => $item,
                 'item_taxes' => $item_taxes,

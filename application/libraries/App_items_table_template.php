@@ -78,6 +78,7 @@ abstract class App_items_table_template
         'item'   => '',
         'qty'    => '',
         'rate'   => '',
+        'discount' => '',
         'tax'    => '',
         'amount' => '',
     ];
@@ -97,15 +98,15 @@ abstract class App_items_table_template
     }
 
     /**
-    * Builds the actual table items rows preview
-    * @return string
-    */
+     * Builds the actual table items rows preview
+     * @return string
+     */
     abstract public function items();
 
     /**
-    * Html headings preview
-    * @return string
-    */
+     * Html headings preview
+     * @return string
+     */
     abstract public function html_headings();
 
     /**
@@ -123,12 +124,16 @@ abstract class App_items_table_template
     {
         foreach ($this->taxes as $tax) {
             $total_tax = array_sum($tax['total']);
-            if (isset($this->transaction->discount_percent) && $this->transaction->discount_percent != 0
-                && isset($this->transaction->discount_type) && $this->transaction->discount_type == 'before_tax') {
+            if (
+                isset($this->transaction->discount_percent) && $this->transaction->discount_percent != 0
+                && isset($this->transaction->discount_type) && $this->transaction->discount_type == 'before_tax'
+            ) {
                 $total_tax_tax_calculated = ($total_tax * $this->transaction->discount_percent) / 100;
                 $total_tax                = ($total_tax - $total_tax_tax_calculated);
-            } elseif (isset($this->transaction->discount_total) && $this->transaction->discount_total != 0
-                && isset($this->transaction->discount_type) && $this->transaction->discount_type == 'before_tax') {
+            } elseif (
+                isset($this->transaction->discount_total) && $this->transaction->discount_total != 0
+                && isset($this->transaction->discount_type) && $this->transaction->discount_type == 'before_tax'
+            ) {
                 $t         = ($this->transaction->discount_total / $this->transaction->subtotal) * 100;
                 $total_tax = ($total_tax - $total_tax * $t / 100);
             }
@@ -423,6 +428,11 @@ abstract class App_items_table_template
     {
         return $this->headings['rate'];
     }
+   
+    public function discount_heading()
+    {
+        return $this->headings['discount'];
+    }
 
     /**
      * Get tax heading
@@ -466,6 +476,7 @@ abstract class App_items_table_template
 
         $this->headings['qty']    = $qty_heading;
         $this->headings['rate']   = _l($langFrom . '_table_rate_heading', '', false);
+        $this->headings['discount']   = _l($langFrom . '_table_discount_heading', '', false);
         $this->headings['tax']    = _l($langFrom . '_table_tax_heading', '', false);
         $this->headings['amount'] = _l($langFrom . '_table_amount_heading', '', false);
 

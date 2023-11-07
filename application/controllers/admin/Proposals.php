@@ -136,6 +136,7 @@ class Proposals extends AdminController
     {
         if ($this->input->post()) {
             $proposal_data = $this->input->post();
+            // print_r($proposal_data);exit;
             if ($id == '') {
                 if (!has_permission('proposals', '', 'create')) {
                     access_denied('proposals');
@@ -258,6 +259,7 @@ class Proposals extends AdminController
 
         try {
             $pdf = proposal_pdf($proposal);
+            // print_r($pdf);
         } catch (Exception $e) {
             $message = $e->getMessage();
             echo $message;

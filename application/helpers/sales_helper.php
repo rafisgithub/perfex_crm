@@ -685,6 +685,7 @@ function add_new_sales_item_post($item, $rel_id, $rel_type)
                     'rel_id'           => $rel_id,
                     'rel_type'         => $rel_type,
                     'item_order'       => $item['order'],
+                    'discount'         => $item['discount'],
                     'unit'             => $item['unit'],
                 ]);
 
@@ -724,6 +725,7 @@ function update_sales_item_post($item_id, $data, $field = '')
             'long_description' => nl2br($data['long_description']),
             'rate'             => number_format($data['rate'], get_decimal_places(), '.', ''),
             'qty'              => $data['qty'],
+            'discount'         => $data['discount'],
             'unit'             => $data['unit'],
         ];
     }

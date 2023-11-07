@@ -100,7 +100,7 @@ class Proposals_model extends App_Model
 
         $data  = $hook['data'];
         $items = $hook['items'];
-
+     
         $this->db->insert(db_prefix() . 'proposals', $data);
         $insert_id = $this->db->insert_id();
 
@@ -175,6 +175,7 @@ class Proposals_model extends App_Model
      */
     public function update($data, $id)
     {
+                // print_r($data);exit;
         $affectedRows = 0;
 
         $data['allow_comments'] = isset($data['allow_comments']) ? 1 : 0;
@@ -233,7 +234,6 @@ class Proposals_model extends App_Model
         $data['removed_items'] = $hook['removed_items'];
         $newitems              = $hook['newitems'];
         $items                 = $hook['items'];
-
         // Delete items checked to be removed from database
         foreach ($data['removed_items'] as $remove_item_id) {
             if (handle_removed_sales_item_post($remove_item_id, 'proposal')) {
@@ -527,6 +527,7 @@ class Proposals_model extends App_Model
 
     public function edit_comment($data, $id)
     {
+        
         $this->db->where('id', $id);
         $this->db->update(db_prefix() . 'proposal_comments', [
             'content' => nl2br($data['content']),

@@ -40,6 +40,7 @@ class App_items_table extends App_items_table_template
 
         $i = 1;
         foreach ($this->items as $item) {
+            // print_r($item);exit;
             $itemHTML = '';
 
             // Open table row
@@ -104,6 +105,17 @@ class App_items_table extends App_items_table_template
             );
 
             $itemHTML .= '<td align="right" width="' . $regularItemWidth . '%">' . $rate . '</td>';
+            /**
+             * Item discount
+             * @var string
+             */
+            $discount = hooks()->apply_filters(
+                'item_preview_rate',
+                app_format_money($item['discount'], $this->transaction->currency_name, $this->exclude_currency()),
+                ['item' => $item, 'transaction' => $this->transaction]
+            );
+
+             $itemHTML .= '<td align="right" width="' . $regularItemWidth . '%">' . $discount . '</td>';
 
             /**
              * Items table taxes HTML custom function because it's too general for all features/options
@@ -153,6 +165,7 @@ class App_items_table extends App_items_table_template
 
         $html .= '<th align="right">' . $this->qty_heading() . '</th>';
         $html .= '<th align="right">' . $this->rate_heading() . '</th>';
+        $html .= '<th align="right">' . $this->discount_heading() . '</th>';
         if ($this->show_tax_per_item()) {
             $html .= '<th align="right">' . $this->tax_heading() . '</th>';
         }
@@ -183,6 +196,8 @@ class App_items_table extends App_items_table_template
 
         $tblhtml .= '<th width="' . $regularItemWidth . '%" align="right">' . $this->qty_heading() . '</th>';
         $tblhtml .= '<th width="' . $regularItemWidth . '%" align="right">' . $this->rate_heading() . '</th>';
+
+        $tblhtml .= '<th width="' . $regularItemWidth . '%" align="right">' . $this->discount_heading() . '</th>';
 
         if ($this->show_tax_per_item()) {
             $tblhtml .= '<th width="' . $regularItemWidth . '%" align="right">' . $this->tax_heading() . '</th>';

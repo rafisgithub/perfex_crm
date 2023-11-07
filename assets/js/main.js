@@ -7120,7 +7120,8 @@ function add_item_to_table(data, itemid, merge_invoice, bill_expense) {
   if (
     data.description === "" &&
     data.long_description === "" &&
-    data.rate === ""
+    data.rate === "" &&
+    data.discount === ""
   ) {
     return;
   }
@@ -7149,8 +7150,12 @@ function add_item_to_table(data, itemid, merge_invoice, bill_expense) {
   if (data.rate === "" || isNaN(data.rate)) {
     data.rate = 0;
   }
+  // Check if discount is number
+  if (data.discount === "" || isNaN(data.discount)) {
+    data.discount = 0;
+  }
 
-  var amount = data.rate * data.qty;
+  var amount = (data.rate * data.qty) - data.discount;
 
   var tax_name = "newitems[" + item_key + "][taxname][]";
   $("body").append('<div class="dt-loader"></div>');
@@ -7292,6 +7297,16 @@ function add_item_to_table(data, itemid, merge_invoice, bill_expense) {
       '][rate]" value="' +
       data.rate +
       '" class="form-control"></td>';
+
+    table_row +=
+      '<td class="discount"><input type="number" data-toggle="tooltip" title="' +
+      app.lang.item_field_not_formatted +
+      '" onblur="calculate_total();" onchange="calculate_total();" name="newitems[' +
+      item_key +
+      '][discount]" value="' +
+      data.discount +
+      '" class="form-control"></td>';
+
 
     table_row += '<td class="taxrate">' + tax_dropdown + "</td>";
 
@@ -7518,6 +7533,7 @@ function get_item_preview_values() {
   response.qty = $('.main input[name="quantity"]').val();
   response.taxname = $(".main select.tax").selectpicker("val");
   response.rate = $('.main input[name="rate"]').val();
+  response.discount = $('.main input[name="discount"]').val();
   response.unit = $('.main input[name="unit"]').val();
   return response;
 }
@@ -7543,6 +7559,7 @@ function calculate_total() {
     rows = $(".table.has-calculations tbody tr.item"),
     discount_area = $("#discount_area"),
     adjustment = $('input[name="adjustment"]').val(),
+    discount = $('input[name="discount"]').val(),
     discount_percent = $('input[name="discount_percent"]').val(),
     discount_fixed = $('input[name="discount_total"]').val(),
     discount_total_type = $(".discount-total-type.selected"),
@@ -7558,7 +7575,7 @@ function calculate_total() {
     }
 
     _amount = accounting.toFixed(
-      $(this).find("td.rate input").val() * quantity,
+      $(this).find("td.rate input").val() * quantity - discount,
       app.options.decimal_places
     );
     _amount = parseFloat(_amount);
