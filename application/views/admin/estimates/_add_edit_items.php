@@ -143,7 +143,7 @@
                                  $manual              = true;
                              }
                              $table_row .= form_hidden('' . $items_indicator . '[' . $i . '][itemid]', $item['id']);
-                             $amount = $item['rate'] * $item['qty'];
+                             $amount = $item['rate'] * $item['qty'] - $item['discount'];
                              $amount = app_format_number($amount);
                              // order input
                              $table_row .= '<input type="hidden" class="order" name="' . $items_indicator . '[' . $i . '][order]">';
@@ -160,6 +160,7 @@
                              $table_row .= '<input type="text" placeholder="' . $unit_placeholder . '" name="' . $items_indicator . '[' . $i . '][unit]" class="form-control input-transparent text-right" value="' . $item['unit'] . '">';
                              $table_row .= '</td>';
                              $table_row .= '<td class="rate"><input type="number" data-toggle="tooltip" title="' . _l('numbers_not_formatted_while_editing') . '" onblur="calculate_total();" onchange="calculate_total();" name="' . $items_indicator . '[' . $i . '][rate]" value="' . $item['rate'] . '" class="form-control"></td>';
+                             $table_row .= '<td class="discount"><input type="number" data-toggle="tooltip" title="' . _l('numbers_not_formatted_while_editing') . '" onblur="calculate_total();" onchange="calculate_total();" name="' . $items_indicator . '[' . $i . '][discount]" value="' . $item['discount'] . '" class="form-control"></td>';
                              $table_row .= '<td class="taxrate">' . $this->misc_model->get_taxes_dropdown_template('' . $items_indicator . '[' . $i . '][taxname][]', $estimate_item_taxes, (isset($is_proposal) ? 'proposal' : 'estimate'), $item['id'], true, $manual) . '</td>';
                              $table_row .= '<td class="amount" align="right">' . $amount . '</td>';
                              $table_row .= '<td><a href="#" class="btn btn-danger pull-left" onclick="delete_item(this,' . $item['id'] . '); return false;"><i class="fa fa-times"></i></a></td>';

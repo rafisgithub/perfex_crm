@@ -686,6 +686,7 @@ function add_new_sales_item_post($item, $rel_id, $rel_type)
                     'rel_type'         => $rel_type,
                     'item_order'       => $item['order'],
                     'unit'             => $item['unit'],
+                    'discount'             => $item['discount'],
                 ]);
 
     $id = $CI->db->insert_id();
@@ -725,6 +726,7 @@ function update_sales_item_post($item_id, $data, $field = '')
             'rate'             => number_format($data['rate'], get_decimal_places(), '.', ''),
             'qty'              => $data['qty'],
             'unit'             => $data['unit'],
+            'discount'             => $data['discount'],
         ];
     }
 

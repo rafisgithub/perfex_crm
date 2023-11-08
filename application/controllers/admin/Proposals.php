@@ -140,6 +140,7 @@ class Proposals extends AdminController
                 if (!has_permission('proposals', '', 'create')) {
                     access_denied('proposals');
                 }
+                
                 $id = $this->proposals_model->add($proposal_data);
                 if ($id) {
                     set_alert('success', _l('added_successfully', _l('proposal')));

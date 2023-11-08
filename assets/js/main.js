@@ -6996,16 +6996,13 @@ function add_item_to_preview(id) {
     var baseCurency = $currency.attr("data-base");
     var selectedCurrency = $currency.find("option:selected").val();
     var $rateInputPreview = $('.main input[name="rate"]');
-    var $discountInputPreview = $('.main input[name="discount"]');
 
     if (baseCurency == selectedCurrency) {
       $rateInputPreview.val(response.rate);
-      $discountInputPreview.val(response.discount);
     } else {
       var itemCurrencyRate = response["rate_currency_" + selectedCurrency];
       if (!itemCurrencyRate || parseFloat(itemCurrencyRate) === 0) {
         $rateInputPreview.val(response.rate);
-        $discountInputPreview.val(response.discount);
       } else {
         $rateInputPreview.val(itemCurrencyRate);
       }
@@ -7079,7 +7076,6 @@ function add_task_to_preview_as_item(id) {
       .val(response.description);
     previewArea.find('input[name="quantity"]').val(response.total_hours);
     previewArea.find('input[name="rate"]').val(response.hourly_rate);
-    previewArea.find('input[name="discount"]').val("");
     previewArea.find('input[name="unit"]').val("");
     $('input[name="task_id"]').val(id);
     $(document).trigger({
@@ -7125,7 +7121,8 @@ function add_item_to_table(data, itemid, merge_invoice, bill_expense) {
   if (
     data.description === "" &&
     data.long_description === "" &&
-    data.rate === ""
+    data.rate === "" &&
+    data.discount === ""
   ) {
     return;
   }
@@ -7563,6 +7560,7 @@ function calculate_total() {
     rows = $(".table.has-calculations tbody tr.item"),
     discount_area = $("#discount_area"),
     adjustment = $('input[name="adjustment"]').val(),
+    // discount = $('input[name="discount"]').val(),
     discount_percent = $('input[name="discount_percent"]').val(),
     discount_fixed = $('input[name="discount_total"]').val(),
     discount_total_type = $(".discount-total-type.selected"),
@@ -7578,7 +7576,7 @@ function calculate_total() {
     }
 
     _amount = accounting.toFixed(
-      $(this).find("td.rate input").val() * quantity - ($this).find("td.discount input"),
+      $(this).find("td.rate input").val() * quantity - $(this).find("td.discount input").val(),
       app.options.decimal_places
     );
     _amount = parseFloat(_amount);

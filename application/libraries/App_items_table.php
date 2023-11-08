@@ -30,7 +30,7 @@ class App_items_table extends App_items_table_template
 
         $descriptionItemWidth = $this->get_description_item_width();
 
-        $regularItemWidth  = $this->get_regular_items_width(6);
+        $regularItemWidth  = $this->get_regular_items_width(9);
         $customFieldsItems = $this->get_custom_fields_for_table();
 
         if ($this->for == 'html') {
@@ -82,7 +82,7 @@ class App_items_table extends App_items_table_template
             /**
              * Item quantity
              */
-            $itemHTML .= '<td align="right" width="' . $regularItemWidth . '%">' . floatVal($item['qty']);
+            $itemHTML .= '<td align="left" width="' . $regularItemWidth . '%">' . floatVal($item['qty']);
 
             /**
              * Maybe item has added unit?
@@ -103,7 +103,18 @@ class App_items_table extends App_items_table_template
                 ['item' => $item, 'transaction' => $this->transaction]
             );
 
-            $itemHTML .= '<td align="right" width="' . $regularItemWidth . '%">' . $rate . '</td>';
+            $itemHTML .= '<td align="left" width="' . $regularItemWidth . '%">' . $rate . '</td>';
+            /**
+             * Item Discount
+             * @var string
+             */
+            $discount = hooks()->apply_filters(
+                'item_preview_rate',
+                app_format_money($item['discount'], $this->transaction->currency_name, $this->exclude_currency()),
+                ['item' => $item, 'transaction' => $this->transaction]
+            );
+
+            $itemHTML .= '<td align="left" width="' . $regularItemWidth . '%">' . $discount . '</td>';
 
             /**
              * Items table taxes HTML custom function because it's too general for all features/options
@@ -117,13 +128,13 @@ class App_items_table extends App_items_table_template
              */
             $item_amount_with_quantity = hooks()->apply_filters(
                 'item_preview_amount_with_currency',
-                app_format_money(($item['qty'] * $item['rate']), $this->transaction->currency_name, $this->exclude_currency()),
+                app_format_money(($item['qty'] * $item['rate']-$item['discount']), $this->transaction->currency_name, $this->exclude_currency()),
                 $item,
                 $this->transaction,
                 $this->exclude_currency()
             );
 
-            $itemHTML .= '<td class="amount" align="right" width="' . $regularItemWidth . '%">' . $item_amount_with_quantity . '</td>';
+            $itemHTML .= '<td class="amount" align="left" width="' . $regularItemWidth . '%">' . $item_amount_with_quantity . '</td>';
 
             // Close table row
             $itemHTML .= '</tr>';
@@ -153,6 +164,7 @@ class App_items_table extends App_items_table_template
 
         $html .= '<th align="right">' . $this->qty_heading() . '</th>';
         $html .= '<th align="right">' . $this->rate_heading() . '</th>';
+        $html .= '<th align="right">' . $this->discount_heading() . '</th>';
         if ($this->show_tax_per_item()) {
             $html .= '<th align="right">' . $this->tax_heading() . '</th>';
         }
@@ -169,7 +181,7 @@ class App_items_table extends App_items_table_template
     public function pdf_headings()
     {
         $descriptionItemWidth = $this->get_description_item_width();
-        $regularItemWidth     = $this->get_regular_items_width(6);
+        $regularItemWidth     = $this->get_regular_items_width(10);
         $customFieldsItems    = $this->get_custom_fields_for_table();
 
         $tblhtml = '<tr height="30" bgcolor="' . get_option('pdf_table_heading_color') . '" style="color:' . get_option('pdf_table_heading_text_color') . ';">';
@@ -181,14 +193,15 @@ class App_items_table extends App_items_table_template
             $tblhtml .= '<th width="' . $regularItemWidth . '%" align="left">' . $cf['name'] . '</th>';
         }
 
-        $tblhtml .= '<th width="' . $regularItemWidth . '%" align="right">' . $this->qty_heading() . '</th>';
-        $tblhtml .= '<th width="' . $regularItemWidth . '%" align="right">' . $this->rate_heading() . '</th>';
+        $tblhtml .= '<th width="' . $regularItemWidth . '%" align="left">' . $this->qty_heading() . '</th>';
+        $tblhtml .= '<th width="' . $regularItemWidth . '%" align="left">' . $this->rate_heading() . '</th>';
+        $tblhtml .= '<th width="' . $regularItemWidth . '%" align="left">' . $this->discount_heading() . '</th>';
 
         if ($this->show_tax_per_item()) {
-            $tblhtml .= '<th width="' . $regularItemWidth . '%" align="right">' . $this->tax_heading() . '</th>';
+            $tblhtml .= '<th width="' . $regularItemWidth . '%" align="left">' . $this->tax_heading() . '</th>';
         }
 
-        $tblhtml .= '<th width="' . $regularItemWidth . '%" align="right">' . $this->amount_heading() . '</th>';
+        $tblhtml .= '<th width="' . $regularItemWidth . '%" align="left">' . $this->amount_heading() . '</th>';
         $tblhtml .= '</tr>';
 
         return $tblhtml;

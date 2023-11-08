@@ -78,6 +78,7 @@ abstract class App_items_table_template
         'item'   => '',
         'qty'    => '',
         'rate'   => '',
+        'discount' =>'',
         'tax'    => '',
         'amount' => '',
     ];
@@ -191,7 +192,7 @@ abstract class App_items_table_template
         $itemHTML = '';
 
         if ($this->show_tax_per_item()) {
-            $itemHTML .= '<td align="right" width="' . $width . '%">';
+            $itemHTML .= '<td align="left" width="' . $width . '%">';
             if (count($item['taxes']) > 0) {
                 foreach ($item['taxes'] as $tax) {
                     $item_tax = '';
@@ -423,6 +424,14 @@ abstract class App_items_table_template
     {
         return $this->headings['rate'];
     }
+    /**
+     * Get discount heading
+     * @return string
+     */
+    public function discount_heading()
+    {
+        return $this->headings['discount'];
+    }
 
     /**
      * Get tax heading
@@ -466,6 +475,7 @@ abstract class App_items_table_template
 
         $this->headings['qty']    = $qty_heading;
         $this->headings['rate']   = _l($langFrom . '_table_rate_heading', '', false);
+        $this->headings['discount']   = _l($langFrom . '_table_discount_heading', '', false);
         $this->headings['tax']    = _l($langFrom . '_table_tax_heading', '', false);
         $this->headings['amount'] = _l($langFrom . '_table_amount_heading', '', false);
 

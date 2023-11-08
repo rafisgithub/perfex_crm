@@ -92,7 +92,7 @@ if ((int)$proposal->adjustment != 0) {
 </tr>';
 }
 $items_html .= '
-<tr style="background-color:#f0f0f0;">
+<tr style="background-color:#f0f0f;">
     <td align="right" width="85%"><strong>' . _l('estimate_total') . '</strong></td>
     <td align="right" width="15%">' . app_format_money($proposal->total, $proposal->currency_name) . '</td>
 </tr>';

@@ -84,7 +84,7 @@ class Proposals_model extends App_Model
             $items = $data['newitems'];
             unset($data['newitems']);
         }
-
+        unset($data['discount']);
         if ($this->copy == false) {
             $data['content'] = '{proposal_items}';
         }
@@ -100,10 +100,12 @@ class Proposals_model extends App_Model
 
         $data  = $hook['data'];
         $items = $hook['items'];
-
+        // echo("<pre>");print_r($data);exit;
         $this->db->insert(db_prefix() . 'proposals', $data);
+        //    echo $this->db->last_query();exit;
         $insert_id = $this->db->insert_id();
-
+     
+// echo $insert_id;exit;
         if ($insert_id) {
             if ($estimateRequestID !== false && $estimateRequestID != '') {
                 $this->load->model('estimate_request_model');
