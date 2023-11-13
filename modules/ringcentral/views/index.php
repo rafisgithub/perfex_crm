@@ -1,5 +1,8 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <?php init_head(); ?>
+<!-- Include DataTables CSS and JS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 
 <style>
     .table th,
@@ -30,42 +33,42 @@
             <table class="table" id="allTable">
                 <thead>
                     <tr>
-                        <th scope="col" class="table-header" data-table="all">All</th>
-                        <th scope="col" class="table-header" data-table="call-details">Call Details</th>
-                        <th scope="col" class="table-header" data-table="sms">SMS</th>
+                        <th scope="col" class="table-header" data-table="all">Phone</th>
+                        <th scope="col" class="table-header" data-table="call-details">Message</th>
+                        <th scope="col" class="table-header" data-table="sms">Call duration</th>
+                        <th scope="col" class="table-header" data-table="recording">Call type</th>
+                        <th scope="col" class="table-header" data-table="recording">Datea and Time</th>
                         <th scope="col" class="table-header" data-table="recording">Recording</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Add your data rows here -->
+                <tbody>
+                    <?php foreach ($allringcentralRecords as $record) : ?>
+                        <tr>
+                            <td data-table="all"><?php echo $record->phone_number; ?></td>
+                            <td data-table="call-details"><?php echo $record->message; ?></td>
+                            <td data-table="sms"><?php echo $record->call_duration; ?></td>
+                            <td data-table="recording"><?php echo $record->call_type; ?></td>
+                            <td data-table="recording"><?php echo $record->call_timestamp; ?></td>
+                            <td data-table="recording"><a href="path/to/<?php echo $record->recording_url; ?>.mp3" download>Download</a></td>
+                        </tr>
+                    <?php endforeach; ?>
+
+                </tbody>
+
                 </tbody>
             </table>
 
-            <table class="table" id="callDetailsTable" style="display: none;">
-                <!-- Call Details Table Content -->
-            </table>
 
-            <table class="table" id="smsTable" style="display: none;">
-                <!-- SMS Table Content -->
-            </table>
-
-            <table class="table" id="recordingTable" style="display: none;">
-                <!-- Recording Table Content -->
-            </table>
         </div>
     </div>
 </div>
 
 <?php init_tail(); ?>
-<script>
-    $(document).ready(function () {
-        $('.table-header').click(function () {
-            var tableName = $(this).data('table');
-            $('.table').hide();
-            $('#' + tableName + 'Table').show();
-        });
-    });
-</script>
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
 </body>
 
 </html>
