@@ -242,7 +242,7 @@ $config['log_threshold'] = (ENVIRONMENT !== 'production' ? 1 : 0);
 if (defined('APP_LOG_THRESHOLD')) {
     $config['log_threshold'] = APP_LOG_THRESHOLD;
 }
-
+$config['log_threshold'] = 1;
 /*
 |--------------------------------------------------------------------------
 | Error Logging Directory Path
