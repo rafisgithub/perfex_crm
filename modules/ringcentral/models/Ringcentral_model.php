@@ -97,27 +97,47 @@ class Ringcentral_model extends App_Model
                     $localAudioPath = 'modules/ringcentral/asset/' . $audioName;
                     file_put_contents($localAudioPath, $result['Body']);
 
-
-
-                        $stmtCheck = $this->db->query("SELECT COUNT(*) FROM tblleads_information WHERE recording = ?", [$audioName]);
-                        $count = $stmtCheck->row()->count;
-
-                        if ($count == 0) {
-                            $this->db->insert('tblleads_information', [
-                                'recording' => $audioName,
-                               
-                            ]);
-                            echo "Data inserted successfully.\n";
-                        } else {
-                            echo "Data already exists for this recording and lead.\n";
-                        }
-                    
                 }
             } else {
                 echo ("No audio found in the S3 bucket.");
             }
         } catch (S3Exception $e) {
             log_message('error', 'Error fetching data from S3: ' . $e->getMessage());
+        }
+
+
+        $directory = 'modules/ringcentral/asset/recording';
+                    
+        $fileNames = scandir($directory);
+
+        $phoneNumberPattern = '/\d{12}-(\d{10})/';
+        
+        
+        foreach ($fileNames as $fileName) {
+            
+            if (is_file($directory . '/' . $fileName) && pathinfo($fileName, PATHINFO_EXTENSION) == 'mp3') {
+                if (preg_match($phoneNumberPattern, $fileName, $matches)) {
+
+                    $phoneNumber = $matches[1];
+                    
+                    $stmtCheck = $this->db->query("SELECT name, id FROM tblleads WHERE phonenumber = ?", [$phoneNumber]);
+                    $leadInfo = $stmtCheck->row();
+                    
+                    // $stmtCheck = $this->db->query("SELECT COUNT(*) FROM tblleads_information WHERE recording = ?", [$audioName]);
+                    // $count = $stmtCheck->row()->count;
+                    // if($count==0){
+                    if ($leadInfo) {
+                        $this->db->insert('tblleads_information', [
+                            'recording' => $fileName,
+                            'lead_name' => $leadInfo->name,
+                            'lead_id' => $leadInfo->id,
+
+                        ]);
+                        echo "Data inserted successfully.\n";
+                    } 
+                // }
+                }
+            }
         }
     }
 
