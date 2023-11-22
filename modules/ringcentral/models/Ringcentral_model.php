@@ -45,8 +45,6 @@ class Ringcentral_model extends App_Model
         parent::__construct();
         //  echo("hi");exit;
 
-
-
     }
 
     public function fetchDataFromS3AndInsertIntoDB()
@@ -133,7 +131,6 @@ class Ringcentral_model extends App_Model
                             'lead_id' => $leadInfo->id,
 
                         ]);
-                        echo "Data inserted successfully.\n";
                     } 
                 // }
                 }

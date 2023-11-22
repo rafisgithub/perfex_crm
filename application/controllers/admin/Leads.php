@@ -46,7 +46,7 @@ class Leads extends AdminController
         $data['leadid']   = $id;
         $data['isKanBan'] = $this->session->has_userdata('leads_kanban_view') &&
             $this->session->userdata('leads_kanban_view') == 'true';
-
+        //    echo("<pre>"); print_r($data);exit;
         $this->load->view('admin/leads/manage_leads', $data);
     }
 
@@ -155,6 +155,9 @@ class Leads extends AdminController
             $data['mail_activity'] = $this->leads_model->get_mail_activity($id);
             $data['notes']         = $this->misc_model->get_notes($id, 'lead');
             $data['activity_log']  = $this->leads_model->get_lead_activity_log($id);
+            $query = $this->db->get('tblleads_information');
+            $data['ringcentral_history'] = $query->result();
+            
 
             if (is_gdpr() && get_option('gdpr_enable_consent_for_leads') == '1') {
                 $this->load->model('gdpr_model');

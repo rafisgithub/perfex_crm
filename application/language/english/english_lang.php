@@ -464,6 +464,7 @@ $lang['lead_add_edit_assigned']            = 'Assigned';
 $lang['lead_add_edit_datecontacted']       = 'Date Contacted';
 $lang['lead_add_edit_contacted_today']     = 'Contacted Today';
 $lang['lead_add_edit_activity']            = 'Activity Log';
+$lang['ringcentral_tab']                   = 'Ring Central';
 $lang['lead_add_edit_notes']               = 'Notes';
 $lang['lead_add_edit_add_note']            = 'Add Note';
 $lang['lead_not_contacted']                = 'I have not contacted this lead';
